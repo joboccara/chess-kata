@@ -1,13 +1,5 @@
-require 'bundler/inline'
-
-gemfile do
-  source 'https://rubygems.org'
-  gem 'minitest'
-  gem 'pry-byebug'
-end
-
 require 'minitest/autorun'
-require_relative 'main'
+require_relative '../app/main'
 
 class TestBoard < Board
   def position_piece(coordinate, piece)
