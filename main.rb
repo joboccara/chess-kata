@@ -43,10 +43,12 @@ module Mover
           board.content(to).nil?
         elsif (to.y - from.y) == 2 && to.x == from.x
           board.content(to).nil? && from.y == 1
+        elsif (to.y - from.y) == 1 && (to.x - from.x).abs == 1
+          !board.content(to).nil? && board.content(to).color != piece_at_from.color
         else
           false
         end
-        
+
         return Outcome.new(false, 'Invalid move for pawn') unless authorized_move
 
         return Outcome.new(true, board)
@@ -62,7 +64,7 @@ Piece = Struct.new(:type, :color)
 class Board
 
   def initialize
-    @matrix = Array.new(8, Array.new(8))
+    @matrix = Array.new(8).map{ Array.new(8) }
   end
 
   def content(position)
@@ -75,13 +77,12 @@ class Board
     position = Position.parse(cell)
 
     if @matrix[position.x][position.y]
-      return Outcome.new(false, "Position taken at #{position.x}, #{position.y}")
+      return Outcome.new(false, "Position taken at #{position}")
     end
 
     @matrix[position.x][position.y] = piece
 
     Outcome.new(true, nil)
   end
-
 
 end

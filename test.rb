@@ -3,6 +3,7 @@ require 'bundler/inline'
 gemfile do
   source 'https://rubygems.org'
   gem 'minitest'
+  gem 'pry-byebug'
 end
 
 require 'minitest/autorun'
@@ -50,14 +51,30 @@ class OurTest < Minitest::Test
     move = Mover.move(board, 'c3', 'c5')
     assert_failure move, 'Invalid move for pawn'
 
+  end
 
-    # new_board = move.output
-    # assert_nil board.content('a2')
-    # assert_equal Piece.new(:pawn, :white), board.content('a3')
+  def test_makes_a_pawn_eat_at_diagnoal_left
+    board = TestBoard.new
+    assert_success board.position_piece('b3', Piece.new(:pawn, :white))
+    assert_success board.position_piece('a4', Piece.new(:pawn, :black))
+    move = Mover.move(board, 'b3', 'a4')
+    assert_success move
+  end
 
-    # move = Mover.move(board, 'a2', 'b3')
-    # assert_failure move, 'No piece at starting position a1'
-    # new_board = move.output
+  def test_makes_a_pawn_eat_at_diagnoal_right
+    board = TestBoard.new
+    assert_success board.position_piece('b3', Piece.new(:pawn, :white))
+    assert_success board.position_piece('c4', Piece.new(:pawn, :black))
+    move = Mover.move(board, 'b3', 'c4')
+    assert_success move
+  end
+
+  def test_fails_a_pawn_eat_at_diagonal_with_no_piece
+    board = TestBoard.new
+    assert_success board.position_piece('b3', Piece.new(:pawn, :white))
+    move = Mover.move(board, 'b3', 'a4')
+    move = Mover.move(board, 'b3', 'c4')
+    assert_failure move, 'Invalid move for pawn'
   end
 
   private
@@ -68,7 +85,7 @@ class OurTest < Minitest::Test
   end
 
   def assert_success(outcome)
-    assert outcome.success
+    assert outcome.success, outcome.output
   end
 
 end
