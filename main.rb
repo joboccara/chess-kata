@@ -39,7 +39,15 @@ module Mover
 
       case piece_at_from.type
       when :pawn
-        return Outcome.new(false, 'Invalid move for pawn') if (to.y - from.y) > 2
+        authorized_move = if (to.y - from.y) == 1 && to.x == from.x
+          board.content(to).nil?
+        elsif (to.y - from.y) == 2 && to.x == from.x
+          board.content(to).nil? && from.y == 1
+        else
+          false
+        end
+        
+        return Outcome.new(false, 'Invalid move for pawn') unless authorized_move
 
         return Outcome.new(true, board)
       else

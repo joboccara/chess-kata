@@ -38,8 +38,19 @@ class OurTest < Minitest::Test
     move = Mover.move(board, 'a2', 'a5')
     assert_failure move, 'Invalid move for pawn'
 
+    # Move 1 up
     move = Mover.move(board, 'a2', 'a3')
     assert_success move
+
+    # Move 2 up from initial position
+    move = Mover.move(board, 'a2', 'a4')
+    assert_success move
+
+    assert_success board.position_piece('c3', Piece.new(:pawn, :white))
+    move = Mover.move(board, 'c3', 'c5')
+    assert_failure move, 'Invalid move for pawn'
+
+
     # new_board = move.output
     # assert_nil board.content('a2')
     # assert_equal Piece.new(:pawn, :white), board.content('a3')
