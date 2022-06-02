@@ -26,8 +26,32 @@ class Position
 end
 
 module Mover
+  module MoveType
+    DIAGONAL = :diagonal
+    FILE = :file
+    RANK = :rank
+    L = :l
+  end
 
   class << self
+    def distance(from, to)
+      if to.x == from.x
+        to.y - from.y 
+      else
+        raise 'This is not a real move'
+      end
+    end
+
+    def classify_move(from, to)
+      if (to.y - from.y) == 1 && to.x == from.x
+        MoveType::FILE
+      elsif (to.y - from.y) == 2 && to.x == from.x
+        MoveType::FILE
+      elsif (to.y - from.y) == 1 && (to.x - from.x).abs == 1
+        MoveType::DIAGONAL
+      end
+    end
+
     def move(board, from_cell, to_cell)
       from = Position.parse(from_cell)
       to = Position.parse(to_cell)
@@ -39,11 +63,17 @@ module Mover
 
       case piece_at_from.type
       when :pawn
-        authorized_move = if (to.y - from.y) == 1 && to.x == from.x
-          board.content(to).nil?
-        elsif (to.y - from.y) == 2 && to.x == from.x
-          board.content(to).nil? && from.y == 1
-        elsif (to.y - from.y) == 1 && (to.x - from.x).abs == 1
+        authorized_move = case classify_move(from, to)
+        when MoveType::FILE
+          traveled_distance = distance(from, to)
+          if traveled_distance == 1
+            board.content(to).nil?
+          elsif traveled_distance == 2
+            board.content(to).nil? && from.y == 1
+          else
+            false
+          end
+        when MoveType::DIAGONAL 
           !board.content(to).nil? && board.content(to).color != piece_at_from.color
         else
           false

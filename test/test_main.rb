@@ -1,5 +1,5 @@
 require 'minitest/autorun'
-require_relative '../app/main'
+require_relative '../lib/main'
 
 class TestBoard < Board
   def position_piece(coordinate, piece)
@@ -10,7 +10,11 @@ end
 class OurTest < Minitest::Test
 
   def test_coordinate_parser
+
+    
     a1 = Position.parse('a1')
+
+
     assert_equal 0, a1.x
     assert_equal 0, a1.y
     assert_equal 'a1', a1.to_s
