@@ -86,6 +86,20 @@ class OurTest < Minitest::Test
     assert_failure Mover.move(board, 'a1', 'a4'), 'Cannot move past a piece'
   end
 
+  def test_moves_to_a_position_with_an_enemy_piece
+    board = TestBoard.new
+    assert_success board.position_piece('a1', Piece.new(:rook, :white))
+    assert_success board.position_piece('a3', Piece.new(:pawn, :black))
+    assert_success Mover.move(board, 'a1', 'a3')
+  end
+
+  def test_does_not_move_to_a_position_with_an_ally_piece
+    board = TestBoard.new
+    assert_success board.position_piece('a1', Piece.new(:rook, :white))
+    assert_success board.position_piece('a3', Piece.new(:rook, :white))
+    assert_failure Mover.move(board, 'a1', 'a3'), 'Cannot move to a position with an ally piece'
+  end
+
   private
 
   def assert_failure(outcome, message)
