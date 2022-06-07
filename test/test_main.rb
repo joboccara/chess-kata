@@ -39,14 +39,14 @@ class OurTest < Minitest::Test
 
   end
 
-  def test_makes_a_pawn_capture_at_diagnoal_left
+  def test_makes_a_pawn_capture_at_diagonal_left
     board = TestBoard.new
     assert_success board.position_piece('b3', Piece.new(:pawn, :white))
     assert_success board.position_piece('a4', Piece.new(:pawn, :black))
     assert_success Mover.move(board, 'b3', 'a4')
   end
 
-  def test_makes_a_pawn_capture_at_diagnoal_right
+  def test_makes_a_pawn_capture_at_diagonal_right
     board = TestBoard.new
     assert_success board.position_piece('b3', Piece.new(:pawn, :white))
     assert_success board.position_piece('c4', Piece.new(:pawn, :black))
@@ -60,6 +60,14 @@ class OurTest < Minitest::Test
     assert_failure Mover.move(board, 'b3', 'c4'), 'Invalid move for pawn'
   end
 
+  def test_fails_a_pawn_capturing_at_diagonal_with_ally_piece
+    board = TestBoard.new
+    assert_success board.position_piece('b3', Piece.new(:pawn, :white))
+    assert_success board.position_piece('a4', Piece.new(:pawn, :white))
+    assert_success board.position_piece('c4', Piece.new(:pawn, :white))
+    assert_failure Mover.move(board, 'b3', 'a4'), 'Invalid move for pawn'
+    assert_failure Mover.move(board, 'b3', 'c4'), 'Invalid move for pawn'
+  end
 
   def test_moves_a_rook_vertically
     board = TestBoard.new
@@ -86,14 +94,14 @@ class OurTest < Minitest::Test
     assert_failure Mover.move(board, 'a1', 'a4'), 'Cannot move past a piece'
   end
 
-  def test_moves_to_a_position_with_an_enemy_piece
+  def test_moves_rook_to_a_position_with_an_enemy_piece
     board = TestBoard.new
     assert_success board.position_piece('a1', Piece.new(:rook, :white))
     assert_success board.position_piece('a3', Piece.new(:pawn, :black))
     assert_success Mover.move(board, 'a1', 'a3')
   end
 
-  def test_does_not_move_to_a_position_with_an_ally_piece
+  def test_does_not_move_rook_to_a_position_with_an_ally_piece
     board = TestBoard.new
     assert_success board.position_piece('a1', Piece.new(:rook, :white))
     assert_success board.position_piece('a3', Piece.new(:rook, :white))
