@@ -53,8 +53,22 @@ module Mover
 
         return Outcome.new(true, board)
       when :rook
-        authorized_move = (to.x - from.x).abs == 0 || (to.y - from.y).abs == 0
+        horizontal_move = (to.y - from.y).abs == 0
+        vertical_move = (to.x - from.x).abs == 0
+        authorized_move = horizontal_move || vertical_move
         return Outcome.new(false, 'Invalid move for rook') unless authorized_move
+
+        if horizontal_move
+          initial_position, *trajectory, final_position = (from.x..to.x).map{|x| Position.new(x, from.y)}
+          vacant_trajectory = trajectory.none?{|position| board.content(position)}
+        end
+
+        if vertical_move
+          initial_position, *trajectory, final_position = (from.y..to.y).map{|y| Position.new(from.x, y)}
+          vacant_trajectory = trajectory.none?{|position| board.content(position)}
+        end
+
+        return Outcome.new(false, 'Cannot move past a piece') unless vacant_trajectory
 
         return Outcome.new(true, board)
       else
