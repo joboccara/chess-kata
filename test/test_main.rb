@@ -39,25 +39,44 @@ class OurTest < Minitest::Test
 
   end
 
-  def test_makes_a_pawn_eat_at_diagnoal_left
+  def test_makes_a_pawn_capture_at_diagnoal_left
     board = TestBoard.new
     assert_success board.position_piece('b3', Piece.new(:pawn, :white))
     assert_success board.position_piece('a4', Piece.new(:pawn, :black))
     assert_success Mover.move(board, 'b3', 'a4')
   end
 
-  def test_makes_a_pawn_eat_at_diagnoal_right
+  def test_makes_a_pawn_capture_at_diagnoal_right
     board = TestBoard.new
     assert_success board.position_piece('b3', Piece.new(:pawn, :white))
     assert_success board.position_piece('c4', Piece.new(:pawn, :black))
     assert_success Mover.move(board, 'b3', 'c4')
   end
 
-  def test_fails_a_pawn_eat_at_diagonal_with_no_piece
+  def test_fails_a_pawn_capturing_at_diagonal_with_no_piece
     board = TestBoard.new
     assert_success board.position_piece('b3', Piece.new(:pawn, :white))
     assert_failure Mover.move(board, 'b3', 'a4'), 'Invalid move for pawn'
     assert_failure Mover.move(board, 'b3', 'c4'), 'Invalid move for pawn'
+  end
+
+
+  def test_moves_a_rook_horizontally
+    board = TestBoard.new
+    assert_success board.position_piece('a1', Piece.new(:rook, :white))
+    assert_success Mover.move(board, 'a1', 'a3')
+  end
+
+  def test_moves_a_rook_vertically
+    board = TestBoard.new
+    assert_success board.position_piece('a1', Piece.new(:rook, :white))
+    assert_success Mover.move(board, 'a1', 'c1')
+  end
+
+  def test_does_not_move_rook_diagonally
+    board = TestBoard.new
+    assert_success board.position_piece('a1', Piece.new(:rook, :white))
+    assert_failure Mover.move(board, 'a1', 'b2'), 'Invalid move for rook'
   end
 
   private

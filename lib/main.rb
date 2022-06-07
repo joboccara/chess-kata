@@ -52,6 +52,11 @@ module Mover
         return Outcome.new(false, 'Invalid move for pawn') unless authorized_move
 
         return Outcome.new(true, board)
+      when :rook
+        authorized_move = (to.x - from.x).abs == 0 || (to.y - from.y).abs == 0
+        return Outcome.new(false, 'Invalid move for rook') unless authorized_move
+
+        return Outcome.new(true, board)
       else
         return Outcome.new(false, "Invalid piece")
       end
