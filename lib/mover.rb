@@ -34,14 +34,15 @@ module Mover
         return Outcome.new(false, 'Invalid move for rook') unless authorized_move
 
         if horizontal_move
-          initial_position, *trajectory, final_position = (from.x..to.x).map{|x| Position.new(x, from.y)}
-          vacant_trajectory = trajectory.none?{|position| board.content(position)}
+          distance = (to.x - from.x).abs
+        elsif vertical_move
+          distance = (to.y - from.y).abs
         end
-
-        if vertical_move
-          initial_position, *trajectory, final_position = (from.y..to.y).map{|y| Position.new(from.x, y)}
-          vacant_trajectory = trajectory.none?{|position| board.content(position)}
-        end
+        
+        x_direction = to.x <=> from.x
+        y_direction = to.y <=> from.y
+        initial_position, *trajectory, final_position = (0..distance).map{ |i| Position.new(from.x + i * x_direction, from.y + i * y_direction) }
+        vacant_trajectory = trajectory.none?{|position| board.content(position)}
 
         return Outcome.new(false, 'Cannot move past a piece') unless vacant_trajectory
 
