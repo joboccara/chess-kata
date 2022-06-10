@@ -57,7 +57,7 @@ class BishopTests < Minitest::Test
   def test_does_not_move_bishop_to_a_position_with_an_ally_piece
     board = TestBoard.new
     assert_success board.position_piece('d4', Piece.new(:bishop, :white))
-    assert_success board.position_piece('f6', Piece.new(:pawn, :black))
+    assert_success board.position_piece('f6', Piece.new(:pawn, :white))
     assert_failure Mover.move(board, 'd4', 'f6'), 'Cannot move to a position with an ally piece'
   end
 end
