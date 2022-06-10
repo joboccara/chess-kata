@@ -49,6 +49,23 @@ module Mover
         return Outcome.new(false, 'Cannot move to a position with an ally piece') if ally_piece_on_destination
 
         return Outcome.new(true, board)
+      when :bishop
+        diagonal_move = (to.y - from.y).abs == (to.x - from.x).abs
+        authorized_move = diagonal_move
+        return Outcome.new(false, 'Invalid move for bishop') unless authorized_move
+
+        distance = (to.y - from.y).abs
+        x_direction = to.x <=> from.x
+        y_direction = to.y <=> from.y
+        initial_position, *trajectory, final_position = (0..distance).map{ |i| Position.new(from.x + i * x_direction, from.y + i * y_direction) }
+        vacant_trajectory = trajectory.none?{|position| board.content(position)}
+
+        return Outcome.new(false, 'Cannot move past a piece') unless vacant_trajectory
+
+        ally_piece_on_destination = !board.content(final_position).nil? && board.content(final_position).color == piece_at_from.color
+        return Outcome.new(false, 'Cannot move to a position with an ally piece') if ally_piece_on_destination
+
+        return Outcome.new(true, board)
       else
         return Outcome.new(false, "Invalid piece")
       end
