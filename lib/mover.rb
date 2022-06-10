@@ -1,32 +1,7 @@
-#!/usr/bin/env ruby
-
-Outcome = Struct.new(:success, :output)
-
-Position = Struct.new(:x, :y)
-
-class Position
-  attr_reader :x, :y
-  def self.parse(cell)
-    # TODO some validation
-    letter, number = cell.split('')
-    Position.new(letter.ord - 'a'.ord, number.to_i - 1)
-  end
-
-  def to_s
-    letter = ('a'.ord + x).chr
-    number = y + 1
-    "#{letter}#{number}"
-  end
-
-  private
-  def initialize(x, y)
-    @x = x
-    @y = y
-  end
-end
+require_relative 'outcome'
+require_relative 'position'
 
 module Mover
-
   class << self
     def move(board, from_cell, to_cell)
       from = Position.parse(from_cell)
@@ -79,32 +54,5 @@ module Mover
       end
     end
   end
-
 end
 
-Piece = Struct.new(:type, :color)
-class Board
-
-  def initialize
-    @matrix = Array.new(8).map{ Array.new(8) }
-  end
-
-  def content(position)
-    @matrix[position.x][position.y]
-  end
-
-  private
-
-  def position_piece(cell, piece)
-    position = Position.parse(cell)
-
-    if @matrix[position.x][position.y]
-      return Outcome.new(false, "Position taken at #{position}")
-    end
-
-    @matrix[position.x][position.y] = piece
-
-    Outcome.new(true, nil)
-  end
-
-end

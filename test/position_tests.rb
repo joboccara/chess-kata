@@ -1,5 +1,5 @@
 require 'minitest/autorun'
-require_relative '../lib/main'
+require_relative '../lib/position'
 
 class PositionTests < Minitest::Test
   def test_coordinate_parser

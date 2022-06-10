@@ -1,4 +1,5 @@
-require_relative '../lib/main'
+require_relative '../lib/board'
+require_relative '../lib/outcome'
 
 class TestBoard < Board
   def position_piece(coordinate, piece)

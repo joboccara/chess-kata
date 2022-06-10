@@ -1,6 +1,7 @@
 require 'minitest/autorun'
 require_relative 'test_helpers'
-require_relative '../lib/main'
+require_relative '../lib/mover'
+require_relative '../lib/piece'
 
 class RookTests < Minitest::Test
   def test_moves_a_rook_vertically
