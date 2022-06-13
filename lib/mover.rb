@@ -64,20 +64,9 @@ module Mover
         return Outcome.new(false, 'Invalid move for pawn') unless authorized_move
 
         return Outcome.new(true, board)
-      when :rook
+      when ->(type) { %i(rook bishop).include? type }
         move = Move.new(from, to)
-        return Outcome.new(false, 'Invalid move for rook') unless authorized_move?(:rook, move)
-
-        vacant_trajectory = move.hovered_positions.none?{|position| board.content(position)}
-        return Outcome.new(false, 'Cannot move past a piece') unless vacant_trajectory
-
-        ally_piece_on_destination = !board.content(to).nil? && board.content(to).color == piece_at_from.color
-        return Outcome.new(false, 'Cannot move to a position with an ally piece') if ally_piece_on_destination
-
-        return Outcome.new(true, board)
-      when :bishop
-        move = Move.new(from, to)
-        return Outcome.new(false, 'Invalid move for bishop') unless authorized_move?(:bishop, move)
+        return Outcome.new(false, "Invalid move for #{piece_at_from.type}") unless authorized_move?(piece_at_from.type, move)
 
         vacant_trajectory = move.hovered_positions.none?{|position| board.content(position)}
         return Outcome.new(false, 'Cannot move past a piece') unless vacant_trajectory
