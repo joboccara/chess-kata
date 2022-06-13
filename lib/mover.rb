@@ -25,8 +25,6 @@ class Move
     (1...distance).map{ |i| Position.new(@from.x + i * x_direction, @from.y + i * y_direction) }
   end
 
-  private
-
   def distance
     if horizontal?
       (@to.x - @from.x).abs
@@ -64,7 +62,7 @@ module Mover
         return Outcome.new(false, 'Invalid move for pawn') unless authorized_move
 
         return Outcome.new(true, board)
-      when ->(type) { %i(rook bishop).include? type }
+      when ->(type) { %i(rook bishop king).include? type }
         move = Move.new(from, to)
         return Outcome.new(false, "Invalid move for #{piece_at_from.type}") unless authorized_move?(piece_at_from.type, move)
 
@@ -79,13 +77,15 @@ module Mover
         return Outcome.new(false, "Invalid piece")
       end
     end
-    
+
     def authorized_move?(piece_type, move)
       case piece_type
       when :rook
         authorized_move = move.horizontal? || move.vertical?
       when :bishop
         authorized_move = move.diagonal?
+      when :king
+        authorized_move =  (move.horizontal? || move.vertical? || move.diagonal?) && move.distance == 1
       end
     end
   end
