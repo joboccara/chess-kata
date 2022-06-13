@@ -1,4 +1,6 @@
 class Move
+  attr_reader :from, :to
+
   def initialize(from, to)
     @from = from
     @to = to
@@ -16,10 +18,8 @@ class Move
     (@to.y - @from.y).abs == (@to.x - @from.x).abs
   end
 
-  def hovered_positions
-    x_direction = @to.x <=> @from.x
-    y_direction = @to.y <=> @from.y
-    (1...distance).map{ |i| Position.new(@from.x + i * x_direction, @from.y + i * y_direction) }
+  def forward?
+    @to.y > @from.y
   end
 
   def distance
@@ -30,5 +30,11 @@ class Move
     elsif diagonal?
       (@to.y - @from.y).abs
     end
+  end
+
+  def hovered_positions
+    x_direction = @to.x <=> @from.x
+    y_direction = @to.y <=> @from.y
+    (1...distance).map{ |i| Position.new(@from.x + i * x_direction, @from.y + i * y_direction) }
   end
 end
