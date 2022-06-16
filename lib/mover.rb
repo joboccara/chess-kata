@@ -10,7 +10,7 @@ module Mover
       piece_at_from = board.content(from)
 
       return Outcome.new(false, "No piece at starting position #{from}") unless piece_at_from
-      return Outcome.new(false, "Invalid piece") unless %i(pawn rook bishop king queen).include? piece_at_from.type
+      return Outcome.new(false, "Invalid piece") unless %i(pawn rook bishop king queen knight).include? piece_at_from.type
 
       move = Move.new(from, to)
       ally_piece_on_destination = !board.content(to).nil? && board.content(to).color == piece_at_from.color
@@ -39,6 +39,8 @@ module Mover
         (move.horizontal? || move.vertical? || move.diagonal?) && move.distance == 1
       when :queen
         move.horizontal? || move.vertical? || move.diagonal?
+      when :knight
+        move.l?
       end
     end
   end

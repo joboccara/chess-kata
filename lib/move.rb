@@ -18,6 +18,12 @@ class Move
     (@to.y - @from.y).abs == (@to.x - @from.x).abs
   end
 
+  def l?
+    x_distance = (@to.x - @from.x).abs
+    y_distance = (@to.y - @from.y).abs
+    [1, 2].include?(x_distance) && x_distance + y_distance == 3
+  end
+
   def forward?
     @to.y > @from.y
   end
@@ -29,6 +35,8 @@ class Move
       (@to.y - @from.y).abs
     elsif diagonal?
       (@to.y - @from.y).abs
+    elsif l?
+      1
     end
   end
 
