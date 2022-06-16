@@ -12,10 +12,10 @@ module Mover
       return Outcome.new(false, "No piece at starting position #{from}") unless piece_at_from
       return Outcome.new(false, "Invalid piece") unless %i(pawn rook bishop king queen knight).include? piece_at_from.type
 
-      move = Move.new(from, to)
       ally_piece_on_destination = !board.content(to).nil? && board.content(to).color == piece_at_from.color
       return Outcome.new(false, 'Cannot move to a position with an ally piece') if ally_piece_on_destination
 
+      move = Move.new(from, to)
       vacant_trajectory = move.hovered_positions.none?{|position| board.content(position)}
       return Outcome.new(false, 'Cannot move past a piece') unless vacant_trajectory
 
