@@ -16,10 +16,10 @@ module Mover
       ally_piece_on_destination = !board.content(to).nil? && board.content(to).color == piece_at_from.color
       return Outcome.new(false, 'Cannot move to a position with an ally piece') if ally_piece_on_destination
 
-      return Outcome.new(false, "Invalid move for #{piece_at_from.type}") unless authorized_move?(piece_at_from.type, move, board)
-
       vacant_trajectory = move.hovered_positions.none?{|position| board.content(position)}
       return Outcome.new(false, 'Cannot move past a piece') unless vacant_trajectory
+
+      return Outcome.new(false, "Invalid move for #{piece_at_from.type}") unless authorized_move?(piece_at_from.type, move, board)
 
       return Outcome.new(true, board)
     end
