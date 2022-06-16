@@ -28,12 +28,12 @@ class PawnTests < Minitest::Test
     assert_failure Mover.move(board, 'a3', 'a5'), 'Invalid move for pawn'
   end
 
-  # def test_fails_to_move_pawn_past_piece
-  #   board = TestBoard.new
-  #   assert_success board.position_piece('a2', Piece.new(:pawn, :white))
-  #   assert_success board.position_piece('a3', Piece.new(:bishop, :white))
-  #   assert_failure Mover.move(board, 'a2', 'a4'), 'Cannot move past a piece'
-  # end
+  def test_fails_to_move_pawn_past_piece
+    board = TestBoard.new
+    assert_success board.position_piece('a2', Piece.new(:pawn, :white))
+    assert_success board.position_piece('a3', Piece.new(:bishop, :white))
+    assert_failure Mover.move(board, 'a2', 'a4'), 'Cannot move past a piece'
+  end
 
   def test_fails_to_move_a_pawn_more_than_two_up
     board = TestBoard.new
